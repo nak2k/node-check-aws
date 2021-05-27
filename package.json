@@ -1,0 +1,44 @@
+{
+  "name": "check-aws",
+  "version": "0.1.0",
+  "description": "Check AWS Environment",
+  "author": "Kengo Nakatsuka <kengo.nakatsuka@gmail.com>",
+  "bin": {
+    "check-aws": "bin/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/nak2k/node-check-aws/issues"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.914.0",
+    "chalk": "^4.1.1",
+    "pkg-dir": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.6.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.2.4"
+  },
+  "homepage": "https://github.com/nak2k/node-check-aws",
+  "keywords": [
+    "aws"
+  ],
+  "license": "MIT",
+  "main": "lib",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nak2k/node-check-aws.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib",
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm-sns",
+    "watch": "tsc -w"
+  },
+  "files": [
+    "README.md",
+    "bin/",
+    "lib/"
+  ]
+}

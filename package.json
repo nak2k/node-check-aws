@@ -1,6 +1,6 @@
 {
   "name": "check-aws",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Check AWS Environment",
   "author": "Kengo Nakatsuka <kengo.nakatsuka@gmail.com>",
   "bin": {

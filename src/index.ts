@@ -1,13 +1,13 @@
 import { readFile } from "fs/promises";
-import { STS } from "aws-sdk";
-import pkgDir = require('pkg-dir');
+import { GetCallerIdentityCommand, STSClient } from "@aws-sdk/client-sts";
+import { packageDirectory } from 'pkg-dir';
 
 export interface CheckAwsConfiguration {
   accountIds: string[];
 }
 
 async function readConfiguration(): Promise<CheckAwsConfiguration> {
-  const rootDir = await pkgDir();
+  const rootDir = await packageDirectory();
 
   if (!rootDir) {
     throw new Error("package.json not found");
@@ -33,9 +33,9 @@ async function readConfiguration(): Promise<CheckAwsConfiguration> {
 export async function checkAws() {
   const config = await readConfiguration();
 
-  const sts = new STS();
+  const sts = new STSClient({});
 
-  const data = await sts.getCallerIdentity({}).promise();
+  const data = await sts.send(new GetCallerIdentityCommand({}));
 
   if (!data.Account) {
     throw new Error("The AWS Account could not be get");

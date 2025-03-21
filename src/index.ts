@@ -2,10 +2,21 @@ import { readFile } from "fs/promises";
 import { GetCallerIdentityCommand, STSClient } from "@aws-sdk/client-sts";
 import pkgDir = require('pkg-dir');
 
+/**
+ * Configuration for the check-aws package.
+ */
 export interface CheckAwsConfiguration {
+  /**
+   * List of valid AWS Account IDs.
+   */
   accountIds: string[];
 }
 
+/**
+ * Read the configuration from the package.json file.
+ * 
+ * @returns 
+ */
 async function readConfiguration(): Promise<CheckAwsConfiguration> {
   const rootDir = await pkgDir();
 
@@ -30,8 +41,17 @@ async function readConfiguration(): Promise<CheckAwsConfiguration> {
   return config;
 }
 
-export async function checkAws() {
-  const config = await readConfiguration();
+/**
+ * Check the AWS Account ID.
+ * 
+ * @param accountIds List of valid AWS Account IDs.
+ *               If not provided, it will be read from the package.json file.
+ */
+export async function checkAws(...accountIds: string[]) {
+  if (accountIds.length === 0) {
+    const config = await readConfiguration();
+    accountIds = config.accountIds;
+  }
 
   const sts = new STSClient({});
 
@@ -41,7 +61,7 @@ export async function checkAws() {
     throw new Error("The AWS Account could not be get");
   }
 
-  if (!config.accountIds.includes(data.Account)) {
+  if (!accountIds.includes(data.Account)) {
     throw new Error(`The AWS Account ${data.Account} not allowed`);
   }
 }
